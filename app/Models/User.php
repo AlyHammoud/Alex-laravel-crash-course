@@ -21,6 +21,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'username'
     ];
 
     /**
@@ -41,4 +42,11 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function posts() //since we are in Users model then: we use it as auth()->user->posts; 
+                                //this returns a colleection
+    {
+        // return $this->hasMany(Post::class, 'id');?
+        return $this->hasMany(Post::class);
+    }
 }
