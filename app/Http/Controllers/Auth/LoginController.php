@@ -18,16 +18,16 @@ class LoginController extends Controller
     }
 
     public function store(Request $request)
-    {
-         $this->validate($request, [
+    { 
+        $this->validate($request, [
             'email' => 'required|email',
             'password' => 'required',
         ]);
 
         if(!auth()->attempt($request->only('email', 'password'), $request->remember)){ //$request->remember = true or false depends on the check box in the loggin
-            return back()->with('status', 'Invalid login details');
+            return back()->with('status', 'Invalid login details')->withInput($request->except('password'));
         }
-
+        
         return redirect()->route('dashboard');
     }
 }
