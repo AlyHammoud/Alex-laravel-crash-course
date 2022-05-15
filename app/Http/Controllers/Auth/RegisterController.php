@@ -29,7 +29,7 @@ class RegisterController extends Controller
             'password' => 'required|confirmed',
         ]);
 
-        
+       
         //store user
         User::create([
             'name' => $request->name,

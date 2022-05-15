@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Post;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Redis;
 use phpDocumentor\Reflection\DocBlock\Tags\Var_;
 use PhpParser\Node\Expr\FuncCall;
@@ -16,8 +17,12 @@ class PostController extends Controller
         
     }
     public function index()
-    {
-        $posts = Post::get();
+    { 
+        
+        //$posts = Post::orderBy('created_at', 'DESC')->get();
+        
+        $posts = Post::orderBy('created_at', 'DESC')->paginate(20);
+        
         return view('posts.index',[
             'posts' => $posts
         ]);
@@ -44,6 +49,7 @@ class PostController extends Controller
         //var_dump($request->user() === auth()->user());die;  TRUE
 
         //post through user and post relation, check User MODEL hasMany
+
         $request->user()->posts()->create($request->only('body'));
         return back();
     }
