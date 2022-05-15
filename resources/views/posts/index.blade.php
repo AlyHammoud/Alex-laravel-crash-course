@@ -28,21 +28,29 @@
                         <p class="mb-2">{{ $post->body }}</p>
 
                         <div class="flex items-center mb-4">
-                            
-                            @if ($post->likedBy(auth()->user()))
-                            <form action="{{ route('posts.likes', $post) }}" method="post" class="mr-2">
-                                @csrf
-                                @method('delete')
-                                <button type="submit" class="text-blue-500">Unlike</button>
+                            @auth
+                                <div class="mr-4">
+                                <form action="{{ route('posts.likes', $post) }}" method="post">
+                                    @csrf
+                                    @method('delete')
+                                    <button type="submit" class="text-blue-500">Delete</button>
+                                </form>
+                                </div>
+                                @if ($post->likedBy(auth()->user()))
+                                <form action="{{ route('posts.likes', $post) }}" method="post" class="mr-2">
+                                    @csrf
+                                    @method('delete')
+                                    <button type="submit" class="text-blue-500">Unlike</button>
 
-                                <span>{{ $post->likes->count() }} {{ Str::plural('like', $post->likes->count()) }}</span>
-                            </form>
-                            @else
-                            <form action="{{ route('posts.likes', $post) }}" method="post" class="mr-2">
-                                @csrf
-                                <button type="submit" class="text-blue-500">Like</button>
-                            </form>
-                            @endif
+                                    <span>{{ $post->likes->count() }} {{ Str::plural('like', $post->likes->count()) }}</span>
+                                </form>
+                                @else
+                                <form action="{{ route('posts.likes', $post) }}" method="post" class="mr-2">
+                                    @csrf
+                                    <button type="submit" class="text-blue-500">Like</button>
+                                </form>
+                                @endif
+                            @endauth
                         </div>
                     </div>
                 @endforeach

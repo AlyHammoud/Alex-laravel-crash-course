@@ -20,8 +20,11 @@ class PostController extends Controller
     { 
         
         //$posts = Post::orderBy('created_at', 'DESC')->get();
-        
-        $posts = Post::orderBy('created_at', 'DESC')->paginate(20);
+                                                            //user and likes are hasMany in Post Model, and used in postView
+                                                            //to avoid multi queryies we used them in with
+                                                            ///composer require barryvdh/laravel-debugbar --dev
+                                                            
+        $posts = Post::orderBy('created_at', 'DESC')->with(['user', 'likes'])->paginate(20);
         
         return view('posts.index',[
             'posts' => $posts
