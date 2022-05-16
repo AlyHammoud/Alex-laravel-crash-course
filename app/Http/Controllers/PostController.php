@@ -24,7 +24,8 @@ class PostController extends Controller
                                                             //to avoid multi queryies we used them in with
                                                             ///composer require barryvdh/laravel-debugbar --dev
                                                             
-        $posts = Post::orderBy('created_at', 'DESC')->with(['user', 'likes'])->paginate(20);
+        //$posts = Post::orderBy('created_at', 'DESC')->with(['user', 'likes'])->paginate(20);
+        $posts = Post::latest()->with(['user', 'likes'])->paginate(20);
         
         return view('posts.index',[
             'posts' => $posts
@@ -55,5 +56,27 @@ class PostController extends Controller
 
         $request->user()->posts()->create($request->only('body'));
         return back();
+    }
+
+    public function destroy(Post $post)
+    {
+        //use policy instead
+        // if(!$post->ownedBy(auth()->user())){
+        //     dd('no');
+        // }
+        // $post->delete();
+        // return back();
+
+        //sail artisan make:policy
+        //generate a function and make the policy
+        //in AuthServiceProvider add in polices that Model Post::class => PostPolicy::class
+        //                 the name of the method defined in the policy
+
+
+        $this->authorize('delete', $post);
+        $post->delete();
+
+        return back();
+
     }
 }
