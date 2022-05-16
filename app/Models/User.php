@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use \Illuminate\Database\Eloquent\Relations\hasMany;
 
 class User extends Authenticatable
 {
@@ -43,15 +44,21 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    public function posts() //since we are in Users model then: we use it as auth()->user->posts; 
+    public function posts() : HasMany //since we are in Users model then: we use it as auth()->user->posts;
                                 //this returns a colleection
     {
         // return $this->hasMany(Post::class, 'id');?
         return $this->hasMany(Post::class);
     }
 
-    public function likes()
+    public function likes() : HasMany
     {
         return $this->hasMany(Like::class);
+    }
+
+    public function receivedLikes()
+    {
+        //this user has many likes through posts
+        return $this->hasManyThrough(Like::class, Post::class);
     }
 }
