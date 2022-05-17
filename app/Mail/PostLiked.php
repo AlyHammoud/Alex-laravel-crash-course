@@ -2,6 +2,8 @@
 
 namespace App\Mail;
 
+use App\Models\Post;
+use App\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
@@ -16,9 +18,14 @@ class PostLiked extends Mailable
      *
      * @return void
      */
-    public function __construct()
+
+    public $liker;
+    public $post;
+
+    public function __construct(User $liker, Post $post)
     {
-        //
+        $this->liker = $liker;
+        $this->post = $post;
     }
 
     /**
@@ -28,6 +35,7 @@ class PostLiked extends Mailable
      */
     public function build()
     {
-        return $this->markdown('emails.posts_liked');
+        return $this->markdown('emails.posts_liked')
+                ->subject('someone liked your post');
     }
 }
